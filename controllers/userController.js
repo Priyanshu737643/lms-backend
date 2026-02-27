@@ -18,14 +18,14 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const found = userModel.findOne({ email });
+    const found = await userModel.findOne({ email });
     if (found) {
       const chkPassword = await bcrypt.compare(password, found.password);
       if (chkPassword) {
         const user = {
-          name,
-          email,
-          role,
+          name:found.name,
+          email:found.email,
+          role:found.role,
         };
         const token = jwt.sign(user, SECRET, { expiresIn: "1h" });
         res.status(200).json({ message: "Login Success", token });
